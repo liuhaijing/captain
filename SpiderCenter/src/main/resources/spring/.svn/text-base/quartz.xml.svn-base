@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-lazy-init="false">
+
+	<bean name="quartzScheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		destroy-method="destroy">
+		<property name="configLocation" value="classpath:quartz.properties" />
+		<property name="waitForJobsToCompleteOnShutdown" value="true" />
+		<property name="triggers">
+			<list>
+				<ref bean="weiBoYiWXSpiderTrigger" />
+			<!--  chijy 912
+				<ref bean="weiBoYiFriendsSpiderTrigger" />
+				<ref bean="weiBoYiPaiSpiderTrigger" />
+			-->
+				<ref bean="CWQSpiderTrigger" />
+				<ref bean="sogouOATrigger" />
+			<!-- chijy 912
+				<ref bean="sogouQueryTrigger" />
+				-->
+			<!-- liuhaijing 2016-10-12  
+				-->
+				<ref bean="sogouQueryArticleTrigger" />
+				
+				<ref bean="sogouFreqTrigger" />
+				<ref bean="sogouFreqUrlTrigger" />
+			<!-- 
+				<ref bean="weiboUserTrigger" />
+				<ref bean="newRankSpiderTrigger" />
+				<ref bean="gsDataSpiderTrigger" />
+			-->
+			</list>
+		</property>
+	</bean>
+	<import resource="wby.xml" />
+	<import resource="cwq.xml" />
+	<import resource="sogou.xml" />
+	<!--  chijy 912
+	<import resource="sina.xml" />
+	<import resource="newrank.xml" />
+	-->
+</beans>

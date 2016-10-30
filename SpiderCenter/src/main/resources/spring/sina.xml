@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-lazy-init="false">
+
+	<!-- 新浪微博博主信息 -->
+	<bean id="weiboUserSpider"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="weiboUserPageProcessor" />
+		<property name="targetMethod" value="start" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="weiboUserTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="weiboUserSpider" />
+		<property name="cronExpression" value="0 0 8 * * ?" />
+	</bean>
+
+
+</beans>

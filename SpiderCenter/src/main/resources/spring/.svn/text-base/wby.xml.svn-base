@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-lazy-init="false">
+
+	<!-- 微播易微信公众号, 每2天跑1次, chijy 919-->
+	<bean id="weiBoYiWXSpider" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="weiBoYiService" />
+		<property name="targetMethod" value="startWX" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="weiBoYiWXSpiderTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="weiBoYiWXSpider" />
+		<!--<property name="cronExpression" value="0 0 22 * * ?" />-->
+		<property name="cronExpression" value="0 30 17 1/2 * ?" />
+	</bean>
+	
+	<!-- 微播易美妙拍   chijy 918
+	<bean id="weiBoYiPaiSpider"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="weiBoYiService" />
+		<property name="targetMethod" value="startPai" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="weiBoYiPaiSpiderTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="weiBoYiPaiSpider" />
+		<property name="cronExpression" value="0 30 10 * * ?" />
+	</bean>
+	-->
+
+	<!-- 微播易朋友圈   chijy 918 
+	<bean id="weiBoYiFriendsSpider"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="weiBoYiService" />
+		<property name="targetMethod" value="startFriends" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="weiBoYiFriendsSpiderTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="weiBoYiFriendsSpider" />
+		<property name="cronExpression" value="0 0 11 * * ?" />
+	</bean>
+	-->
+
+</beans>

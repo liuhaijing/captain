@@ -1,0 +1,21 @@
+#max total connection in the pool,default is 200
+#connection.max.total=300
+
+#max connection to the same http route,default is 20
+#connection.default.perroute=20
+
+#disableCookieManagement or not,the default value is true.
+#disable.cookie.management=true
+
+#disableAutomaticRetries or not,the default value is true.
+#disable.automatic.retries=true
+
+#idle connection keep alive time in seconds,default is 60s and has nonsense if set it less than 30s.
+#connection.idle.time=5
+
+#note:this parameter has nonsense now.
+#specific httproute max connection 
+#connection.max.httproute=www.baidu.com:10;www.sina.com:15
+
+
+

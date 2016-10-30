@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-lazy-init="false">
+
+
+	<!-- 新榜指数抓取 -->
+	<bean id="newRankSpider"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="newRankPageProcessor" />
+		<property name="targetMethod" value="start" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="newRankSpiderTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="newRankSpider" />
+		<property name="cronExpression" value="0 30 10 * * ?" />
+	</bean>
+
+	<!-- 清博指数抓取 -->
+	<bean id="gsDataSpider"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gsDataPageProcessor" />
+		<property name="targetMethod" value="start" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="gsDataSpiderTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gsDataSpider" />
+		<property name="cronExpression" value="0 30 10 * * ?" />
+	</bean>
+
+
+</beans>

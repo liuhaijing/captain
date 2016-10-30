@@ -1,0 +1,101 @@
+1)程序入口为:com.jiou.Bootstrap.
+
+2)目前在101.201.75.190、101.201.75.164、101.201.75.227上都有部署爬虫，启动程序后，爬虫会等待redis队列中的URL，
+      向队列中加入种子的定时任务则只有101.201.75.190上有,区别是101.201.75.190上的quartz.xml有配置triggers,其他两台无.
+      
+3)mongodb集合及字段说明:
+	chengwaiquan:城外圈
+		nickname-微信名,insert_time-抓取时间,first_price-多图头条报价,second_price-多图次条报价,third_price-多图3-n条报价,
+		read_num-阅读量,weichatno-微信号,type-1硬广2软广
+	ganji_tel:赶集网联系方式
+		city-城市,cat-商品分类,contacts-联系人,tel-电话,qq-QQ号,insert_time-抓取时间
+	sogou_articles:根据姜小白等关键词抓取的搜狗微信文章表
+		url-文章URL,query-关键词,title-标题,pubtime-发布时间,content-内容,
+		wxnum-微信号,wxname-微信名,read_num-阅读数,like_num-点赞数,insert_time-抓取时间
+	sogou_freq_article:根据关键词和频率抓取搜狗微信的文章内容表
+		uid-根据文章标题、微信号、发布时间生成的唯一键,title-标题,wxnum-微信号,wxname-微信名,
+		url-文章URL,content-内容,pubtime-发布时间,insert_time-插入时间	
+	sogou_freq_nums:根据关键词和频率抓取搜狗微信的文章阅读点赞表
+		uid-关联sogou_freq_article的uid,read_num-阅读数,like_num-点赞数,insert_time-插入时间
+	sogou_freq_task:根据关键词和频率抓取搜狗微信的种子表
+		query-关键词,start_time-开始抓取时间,end_time-结束时间,last_exec_time-上次抓取时间,interval-间隔时间(单位second),enable-是否启用
+	sogou_task_list:根据姜小白等关键词抓取的搜狗微信的种子表
+		query-关键词
+	weibo_user:新浪微博博主信息
+		url-博主主页URL,uid,group-分组,cat-分类,uname-微博名,gender-性别1男2女,brief-简介,
+		address-区域,label-标签,isveri-是否认证,isvip-是否会员,concern-关注数,fans-粉丝数,blognums-微博数,level-等级,update_time-更新时间
+	weiboyi_friends:微博易朋友圈
+		face_url-头像URL,wxname-微信名,wxno-微信号,home_url-主页外链,domain-行业分类,area-区域,gender-性别,1-男,2-女,3-其他,
+		age-年龄,impression-好友描述,friendsno-好友数,tfcase-投放案例,mon_orders-月订单数,
+		week_orders-周订单数,external_refer_price_min-外部参考报价MIN,external_refer_price_max-外部参考报价MAX,
+		gross_deal_price-总成交价,net_deal_price-净交易价格,is_veri-身份信息是否核实1-是2-否,can_ori-是否可原创1-是2-否3-未知,
+	weiboyi_mmpai:微博易美拍秒拍
+		face_url-头像URL,name-名称,home_url-主页外链,profession-职业,domain-领域分类,
+		area-区域,gender-性别1-男2-女3-其他,desc-账号描述,coop_notice-合作须知,can_ori-是否可原创,
+		funsno-粉丝数,external_refer_price_min-外部参考报价MIN,external_refer_price_max-外部参考报价MAX,
+		gross_deal_price-总成交价,net_deal_price-净交易价格,views-平均播放数,reviews-平均评论数,
+		approvals-平均点赞数,coop_degree-配合度
+	weiboyi_wx:微博易微信公众号
+		face_url-头像URL,wxname-微信名,wxno-微信号,gender-性別1-男,2-女,3-其他,is_auth-是否微信认证-1是,2否
+		can_ori-是否可原创-1是,2否,home_url-主页外链,desc-账号描述,coop_noti-合作须知（预约须知）,
+		domain-领域分类,role-用户角色（名人/媒体）1-名人,2-媒体,funsno-粉丝数,single_min-单图文最低报价,
+		single_max-单图文最高报价,fisrt_min-多图文第一条最低报价,first_max-多图文第一条最高报价,
+		second_min-多图文第二条最低报价,second_max-多图文第二条最高报价,third_min-多图文第3-n条最低报价,
+		third_max-多图文第3-n条最高报价,single_hard-单图文硬广报价,single_soft-单图文软广报价,
+		first_hard-多图文第一条硬广报价,first_soft-多图文第一条软广报价,second_hard-多图文第二条硬广报价,
+		second_soft-多图文第二条软广报价,third_hard-多图文第3-n条硬广报价,third_soft-多图文第3-n条软广报价,
+		sin_read_num-单图文阅读量,fst_read_num-多图文第一条阅读量,sec_read_num-多图文第二条阅读量,
+		thd_read_num-多图文第3-n条阅读量,week_update-周更新,coop_degree-配合度,snbt-SNBT指数
+	wx_accounts:搜狗微信公众号信息表
+		wxnum-微信号,wxname-微信名,portrait_url-头像URL,portrait-头像二进制数组,qrcode-二维码数组,brief-简介,auth-认证信息,date-更新时间
+	wx_art_htmls:微信公众号HTML源码表
+		wxnum-微信号,uid-唯一键,html-gzip压缩的html源码,date-插入时间
+	wx_art_nums:搜狗微信公众号文章阅读点赞数表
+		wxnum-微信号,uid-关联wx_arts集合的uid,read_num-阅读数,like_num-点赞数,date-插入时间
+	wx_arts:搜狗微信公众号文章表
+		wxnum-微信号,uid-根据微信号、标题、发布时间生成的唯一键,title-标题,content-内容,pubtime-发布时间,original-是否原创,
+		ismulti-是否单图文,0-否,1-是,idx-第几条,source_url-原始链接,cover-图片URL,url-文章URL,date-插入时间
+	wx_list:搜狗微信公众号文章种子表
+		wxnum-微信号,uid,wxname-微信名,idx,biz
+	
+4)配置文件说明:
+	context.xml-spring主配置文件
+	quartz.xml-定时任务主配置文件
+	cwq.xml-城外圈爬虫任务配置
+	wby.xml-微博易爬虫任务配置
+	sogou.xml-搜狗微信爬虫任务配置
+	sina.xml-新浪微博爬虫任务配置
+	newrank.xml-清博指数和新榜指数爬虫任务配置
+	
+5)redis中爬虫任务队列的命名规则是:前缀list_加上爬虫的uuid;例如搜狗微信公众号抓取任务的队列为:list_SogouSpider.不是所有的爬虫都用的redis队列，数据量小的
+      直接用的java内存队列,目前只有搜狗爬虫、新浪微博爬虫、赶集网爬虫用的分布式队列,在爬虫初始化时可以如果设置了spider.scheduler(new RedisScheduler())则使用
+      的是redis队列,否则使用的是java内存队列.
+
+6)爬虫可以通过jconsole监控，具体是:101.201.75.164:60001;101.201.75.190:60001;101.201.75.227:60001
+
+7)注意检查搜狗是否还有cookie(redis命令llen sogou_cookies),若无,则需要购买蚂蚁代理来生成cookie推入sogou_cookies队列.放入程序参考PushSogouCookie.
+      建议购买1天单线程的蚂蚁代理,然后在当天生成很多cookie放入队列,这样可以用很久,还节约成本.
+  redis-cli
+  llen sogou_cookies
+  test/java/sogou/PushSogouCookie 执行main函数
+  
+  com.jiou.support.Mayi里appkey，secret 这个key 续费。
+  
+  群424699147 找群主大蚂蚁 联系续费
+
+8)城外圈和微博易需要验证码登陆,注意查看若快打码还有没有积分.网址:http://www.ruokuai.com/;用户名密码:jimeng2016/jimeng123.
+
+
+	
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

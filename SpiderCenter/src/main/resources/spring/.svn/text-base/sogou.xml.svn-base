@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-lazy-init="false">
+
+	<!-- 搜狗微信公众号基本信息爬虫, 每3天跑1次, chijy 912-->
+	<bean id="sogouOASpider"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="sogouFetchSerice" />
+		<property name="targetMethod" value="addTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="sogouOATrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sogouOASpider" />
+		<!--<property name="cronExpression" value="0 40 18 * * ?" />-->
+		<property name="cronExpression" value="0 40 18 1/3 * ?" />
+	</bean>
+	
+	<!-- 搜狗关键词爬虫  chijy 912
+	<bean id="sogouQuerySpider"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="sogouQueryService" />
+		<property name="targetMethod" value="start" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="sogouQueryTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sogouQuerySpider" />
+		<property name="cronExpression" value="0 0 7 * * ?" />
+	</bean>	
+	-->
+	<!-- 搜狗爬虫 根据公众号爬取其下三天内发布的文章信息   liuhaijing 2016-10-12  
+	-->
+	<bean id="sogouQueryArticleSpider"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="sogouQueryArticleService" />
+		<property name="targetMethod" value="start" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="sogouQueryArticleTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sogouQueryArticleSpider" />
+		<property name="cronExpression" value="0 0 2 * * ?" />
+	</bean>	
+
+	<!-- 搜狗频度爬虫, 每隔20分钟, chijy 928-->
+	<bean id="sogouFreqSpider"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="sogouFreqService" />
+		<property name="targetMethod" value="start" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="sogouFreqTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sogouFreqSpider" />
+		<property name="cronExpression" value="0 0/15 * * * ?" />
+	</bean>
+	
+	
+		<!-- 搜狗频度爬虫 按照链接爬取, 每隔20分钟, liuhaijing 929-->
+	<bean id="sogouFreqUrlSpider"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="sogouFreqUrlService" />
+		<property name="targetMethod" value="start" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="sogouFreqUrlTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sogouFreqUrlSpider" />
+		<property name="cronExpression" value="0 0/15 * * * ?" />
+	</bean>
+
+</beans>

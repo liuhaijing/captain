@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="5 minutes" debug="false">
+
+	<contextName>SpiderCenter</contextName>
+
+	<property name="log.project.name" value="SpiderCenter" />
+	<property name="log.base.path" value="logs" />
+	<property name="log.file.charset" value="UTF-8" />
+	<property name="log.out.charset" value="UTF-8" />
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{30} %L - %msg%n</pattern>
+			<charset>${log.out.charset}</charset>
+		</encoder>
+	</appender>
+
+	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.base.path}/app.out</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.base.path}/log.%d{yyyy-MM-dd}.out</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
+			<charset>${log.file.charset}</charset>
+		</encoder>
+	</appender>
+	
+	<logger name="org.hibernate" level="WARN">
+		<appender-ref ref="console" />
+		<appender-ref ref="file" />
+	</logger>
+	<logger name="org.springframework" level="WARN">
+		<appender-ref ref="console" />
+		<appender-ref ref="file" />
+	</logger>
+	<logger name="net.sf.ehcache" level="WARN" />
+	<logger name="cn.lizhe" level="INFO" />
+	<logger name="org.quartz" level="WARN" />
+	<logger name="org.apache.zookeeper" level="WARN" />
+	<!-- <logger name="us.codecraft.webmagic.scheduler" level="DEBUG" /> -->
+	
+	<root level="INFO">
+		<appender-ref ref="console" />
+		<appender-ref ref="file" />
+	</root>
+	
+</configuration>
